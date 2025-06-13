@@ -56,22 +56,22 @@ void test_DecodeUart_full() {
 
 }
 
-void test_DecodeRequest_DAC1()
+void test_QueueUart_DAC1()
 {
     char result = 0;
     strcpy(sU.req, "DAC1 121\xD"); 
 
-    result = DecodeRequest();
+    result = QueueUart();
     TEST_ASSERT_EQUAL(REQ_DAC1, result);
     TEST_ASSERT_EQUAL('x', sD.quest);
 }
 
-void test_DecodeRequest_DAC1_send()
+void test_QueueUart_DAC1_send()
 {
     char result = 0;
     strcpy(sU.req, "DAC1 3.14\xD"); 
 
-    result = DecodeRequest();
+    result = QueueUart();
     TEST_ASSERT_EQUAL('3', sD.buf[0]);
     TEST_ASSERT_EQUAL('.', sD.buf[1]);
     TEST_ASSERT_EQUAL('1', sD.buf[2]);
@@ -81,12 +81,12 @@ void test_DecodeRequest_DAC1_send()
 }
 
 
-void test_DecodeRequest_DAC1_check()
+void test_QueueUart_DAC1_check()
 {
     char result = 0;
     strcpy(sU.req, "DAC1? ---\xD"); 
 
-    result = DecodeRequest();
+    result = QueueUart();
     TEST_ASSERT_EQUAL('3', sD.buf[0]); // 3.14159
     TEST_ASSERT_EQUAL('.', sD.buf[1]);
     TEST_ASSERT_EQUAL('1', sD.buf[2]);
@@ -105,11 +105,11 @@ int main( int argc, char **argv) {
     tearDown();
     RUN_TEST(test_DecodeUart_full);
     tearDown();
-    RUN_TEST(test_DecodeRequest_DAC1);
+    RUN_TEST(test_QueueUart_DAC1);
     tearDown();
-    RUN_TEST(test_DecodeRequest_DAC1_send);
+    RUN_TEST(test_QueueUart_DAC1_send);
     tearDown();
-    RUN_TEST(test_DecodeRequest_DAC1_check);
+    RUN_TEST(test_QueueUart_DAC1_check);
 
     UNITY_END();
     return 0; // Dodano return dla main

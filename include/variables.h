@@ -1,15 +1,27 @@
 #ifndef VARIABLES_H_
 #define VARIABLES_H_
 
-// #define POS 16
-// #define END_SYMBOL 13
+struct DAC_variables{
+    float DAC1;
+    float DAC2;
+    float DAC3;
+    float DAC4;
+    float DAC5;
+    float DAC6;
+    float DAC7;
+    float DAC8;
+} ;
 
-// struct sUART{
-//     unsigned char sign;
-//     unsigned char buf [POS];
-//     unsigned char req [POS];
-//     char count; // old A
-// } ;
+struct ADC_variables{
+    float ADC1;
+    float ADC2;
+    float ADC3;
+    float ADC4;
+} ;
+
+
+extern struct DAC_variables sDAC;
+extern struct ADC_variables sADC;
 
 
 #endif

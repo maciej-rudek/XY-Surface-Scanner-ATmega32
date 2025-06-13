@@ -1,6 +1,9 @@
 #ifndef _UART_H_
 #define _UART_H_
 
+#define ID "MR_001a"
+#define WHATISTHAT "Wrong instruction"
+
 #define POS 16
 #define END_SYMBOL 13 // 13
 
@@ -17,8 +20,7 @@
 #define REQ_DAC7 7
 #define REQ_DAC8 8
 
-
-#define REQ_SYM5 5
+// #define REQ_SYM5 5
 
 #define REQ_ADC1 11
 #define REQ_ADC2 12
@@ -31,6 +33,8 @@
 #define REQ_TIME3 23
 #define REQ_TIME4 24
 
+#define REQ_WHAT 244
+
 struct sUART{
     unsigned char buf [POS];
     char req [POS];
@@ -41,6 +45,7 @@ struct sDecode{
     char buf [POS];
     char quest;
     float var; // old A
+    char cvar; // old A
 } ;
 
 extern struct sUART sU;
@@ -48,6 +53,6 @@ extern struct sDecode sD;
 
 void Uart_Send( char tekst[]);
 char DecodeUart(char cUDR);
-char DecodeRequest();
+char QueueUart();
 
 #endif

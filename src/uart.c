@@ -8,14 +8,14 @@
 #include "../include/variables.h"
 #include "../include/uart.h"
 
-#define ID "MR_001a"
-
 struct sUART sU;
 struct sDecode sD;
+struct DAC_variables sDAC;
+struct ADC_variables sADC;
 
 
 char DecodeUart(char cUDR);
-char DecodeRequest();
+char QueueUart();
 
 void Uart_Send(  char tekst[] )
 {
@@ -59,36 +59,81 @@ char DecodeUart(char cUDR)
     }
 }
 
-
-char DecodeRequest()
+char DecodeFloat(char sym_pos, float *variable )
 {
-  char ret = REQ_NON;
-  if(0==strncmp(sU.req,"*IDN?",REQ_SYM5)) 
-	  { 
-      ret = REQ_IDN;
-      Uart_Send(ID);
-	  }
-    if(0==strncmp(sU.req,"DAC1",REQ_SYM4))
-    { 
-      ret = REQ_DAC1;
-      sD.quest = (sU.req[REQ_SYM4]=='?') ? '?' : 'x' ;
+  sD.quest = (sU.req[sym_pos]=='?') ? '?' : 'x' ;
 
-      if(sD.quest=='x')
+  if(sD.quest=='?')
+  { 
+    sprintf( sD.buf, "%f", *variable );
+    Uart_Send(sD.buf);
+  }
+  else
+  {
+    char i = 0;
+    do
       { 
-        char i = 0;
-        do
-          { 
-            sD.buf[i]=sU.req[i + 1 + REQ_SYM4]; 
-            i++; 
-          }while(sU.req[i] != END_SYMBOL);
-        
-          sscanf(sD.buf, "%f", &sD.var );
-      }
-      else
-      {
-        sprintf( sD.buf, "%f", 3.14159 );
-        Uart_Send(sD.buf);
-      }
-	    }
-  return ret;
+        sD.buf[i]=sU.req[i + 1 + sym_pos]; 
+        i++; 
+      }while(sU.req[i] != END_SYMBOL);
+    
+      sscanf(sD.buf, "%f", &sD.var );
+      variable = &sD.var;
+  }
+  return 0;
+}
+
+char DecodeChar(char sym_pos, char *variable )
+{
+  sD.quest = (sU.req[sym_pos]=='?') ? '?' : 'x' ;
+
+  if(sD.quest=='?')
+  { 
+    sprintf( sD.buf, "%c", *variable );
+    Uart_Send(sD.buf);
+  }
+  else
+  {
+    char i = 0;
+    do
+      { 
+        sD.buf[i]=sU.req[i + 1 + sym_pos]; 
+        i++; 
+      }while(sU.req[i] != END_SYMBOL);
+    
+      sscanf(sD.buf, "%c", &sD.cvar );
+      variable = &sD.cvar;
+  }
+  return 0;
+}
+
+char DecodeInst()
+{
+  if (0 == strncmp(sU.req,"*IDN",REQ_SYM4)) return REQ_IDN;
+  if (0 == strncmp(sU.req,"DAC1",REQ_SYM4)) return REQ_DAC1;
+  if (0 == strncmp(sU.req,"DAC2",REQ_SYM4)) return REQ_DAC2;
+
+}
+
+char QueueUart()
+{
+  char instr = DecodeInst();
+
+  switch (instr)
+  {
+    case REQ_IDN:
+      Uart_Send(ID);
+    break;
+  
+    case REQ_DAC1:
+      sDAC.DAC1 = 3.14159;
+      DecodeFloat(REQ_SYM4, &sDAC.DAC1);
+    break;
+  
+    default:
+      Uart_Send(WHATISTHAT);
+    break;
+  }
+
+  return instr;
 }
