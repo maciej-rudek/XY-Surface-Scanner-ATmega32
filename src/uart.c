@@ -29,11 +29,11 @@ void Uart_Send(  char tekst[] )
         i++;
       }
     while ( !( UCSRA & (1<<UDRE)) );
-      UDR = 10;
+    UDR = 10;
     while ( !( UCSRA & (1<<UDRE)) );
     UDR = 13;
     while ( !( UCSRA & (1<<UDRE)) );
-      UCSRB = 0x98;
+    UCSRB = 0x98;
   #endif
 }
 
@@ -62,33 +62,33 @@ char DecodeUart(char cUDR)
 
 char DecodeRequest()
 {
-  char ret = 0;
-  if(0==strncmp(sU.req,"*IDN?",5)) 
+  char ret = REQ_NON;
+  if(0==strncmp(sU.req,"*IDN?",REQ_SYM5)) 
 	  { 
-      ret = 1;
+      ret = REQ_IDN;
       Uart_Send(ID);
 	  }
-    if(0==strncmp(sU.req,"DAC1",4))
+    if(0==strncmp(sU.req,"DAC1",REQ_SYM4))
     { 
-      ret = 2;
-      sD.quest = (sU.req[4]=='?') ? 'a' : 'x' ;
+      ret = REQ_DAC1;
+      sD.quest = (sU.req[REQ_SYM4]=='?') ? '?' : 'x' ;
 
-      if(sU.req[4]==' ')
+      if(sD.quest=='x')
       { 
         char i = 0;
         do
           { 
-            sD.buf[i]=sU.req[i+5]; 
+            sD.buf[i]=sU.req[i + 1 + REQ_SYM4]; 
             i++; 
-          }while(sU.req[i]!=13);
+          }while(sU.req[i] != END_SYMBOL);
         
           sscanf(sD.buf, "%f", &sD.var );
-    }
-		  // if(zapytanie==1)
-			// { 
-      //   sprintf( temp, "%d", m_PGA );
-		  //   Uart_Send(temp);
-			// }
+      }
+      else
+      {
+        sprintf( sD.buf, "%f", 3.14159 );
+        Uart_Send(sD.buf);
+      }
 	    }
   return ret;
 }

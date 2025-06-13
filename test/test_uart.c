@@ -62,11 +62,11 @@ void test_DecodeRequest_DAC1()
     strcpy(sU.req, "DAC1 121\xD"); 
 
     result = DecodeRequest();
-    TEST_ASSERT_EQUAL(2, result);
+    TEST_ASSERT_EQUAL(REQ_DAC1, result);
     TEST_ASSERT_EQUAL('x', sD.quest);
 }
 
-void test_DecodeRequest_DAC1_v2()
+void test_DecodeRequest_DAC1_send()
 {
     char result = 0;
     strcpy(sU.req, "DAC1 3.14\xD"); 
@@ -80,6 +80,23 @@ void test_DecodeRequest_DAC1_v2()
     TEST_ASSERT_EQUAL(3.14, sD.var);
 }
 
+
+void test_DecodeRequest_DAC1_check()
+{
+    char result = 0;
+    strcpy(sU.req, "DAC1? ---\xD"); 
+
+    result = DecodeRequest();
+    TEST_ASSERT_EQUAL('3', sD.buf[0]); // 3.14159
+    TEST_ASSERT_EQUAL('.', sD.buf[1]);
+    TEST_ASSERT_EQUAL('1', sD.buf[2]);
+    TEST_ASSERT_EQUAL('4', sD.buf[3]);
+    TEST_ASSERT_EQUAL('1', sD.buf[4]);
+    TEST_ASSERT_EQUAL('5', sD.buf[5]);
+    TEST_ASSERT_EQUAL('9', sD.buf[6]);
+    TEST_ASSERT_EQUAL('0', sD.buf[7]);
+}
+
 int main( int argc, char **argv) {
      //pio test -e uTest -vvv
     UNITY_BEGIN();
@@ -90,7 +107,9 @@ int main( int argc, char **argv) {
     tearDown();
     RUN_TEST(test_DecodeRequest_DAC1);
     tearDown();
-    RUN_TEST(test_DecodeRequest_DAC1_v2);
+    RUN_TEST(test_DecodeRequest_DAC1_send);
+    tearDown();
+    RUN_TEST(test_DecodeRequest_DAC1_check);
 
     UNITY_END();
     return 0; // Dodano return dla main

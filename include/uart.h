@@ -18,7 +18,7 @@
 #define REQ_DAC8 8
 
 
-#define REQ_SYM4 5
+#define REQ_SYM5 5
 
 #define REQ_ADC1 11
 #define REQ_ADC2 12
