@@ -59,50 +59,47 @@ char DecodeUart(char cUDR)
     }
 }
 
-char DecodeFloat(char sym_pos, float *variable )
-{
-  sD.quest = (sU.req[sym_pos]=='?') ? '?' : 'x' ;
 
-  if(sD.quest=='?')
-  { 
-    sprintf( sD.buf, "%f", *variable );
-    Uart_Send(sD.buf);
-  }
-  else
-  {
-    char i = 0;
+void ProcesBuffer(char sym_pos)
+{
+  char i = 0;
     do
       { 
         sD.buf[i]=sU.req[i + 1 + sym_pos]; 
         i++; 
       }while(sU.req[i] != END_SYMBOL);
-    
-      sscanf(sD.buf, "%f", &sD.var );
-      variable = &sD.var;
-  }
-  return 0;
 }
 
-char DecodeChar(char sym_pos, char *variable )
+char DecodeVariable(char sym_pos, void *variable, const char *format )
 {
   sD.quest = (sU.req[sym_pos]=='?') ? '?' : 'x' ;
 
   if(sD.quest=='?')
   { 
-    sprintf( sD.buf, "%c", *variable );
+    if(format == "%f")
+    {
+      sprintf( sD.buf, format,  *((float*)variable ));
+    }
+    if(format == "%c")
+    {
+      sprintf( sD.buf, format,  *((char*)variable ));
+    }
+    
     Uart_Send(sD.buf);
   }
   else
   {
-    char i = 0;
-    do
-      { 
-        sD.buf[i]=sU.req[i + 1 + sym_pos]; 
-        i++; 
-      }while(sU.req[i] != END_SYMBOL);
-    
-      sscanf(sD.buf, "%c", &sD.cvar );
+    ProcesBuffer(sym_pos);
+    if(format == "%f")
+    {
+      sscanf(sD.buf, format, &sD.var );
+      variable = &sD.var;
+    }
+    if(format == "%c")
+    {
+      sscanf(sD.buf, format, &sD.cvar );
       variable = &sD.cvar;
+    }
   }
   return 0;
 }
@@ -127,7 +124,7 @@ char QueueUart()
   
     case REQ_DAC1:
       sDAC.DAC1 = 3.14159;
-      DecodeFloat(REQ_SYM4, &sDAC.DAC1);
+      DecodeVariable(REQ_SYM4, &sDAC.DAC1, "%f");
     break;
   
     default:
