@@ -15,7 +15,7 @@ extern struct sDecode sD;
     char uart_status = DecodeUart(UDR);
     if(uart_status == 1)
     {
-      DecodeRequest();
+      QueueUart();
       uart_status = 0;
     }
   }
