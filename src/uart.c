@@ -14,7 +14,11 @@ struct DAC_variables sDAC;
 struct ADC_variables sADC;
 
 
+void Uart_Send( char tekst[]);
 char DecodeUart(char cUDR);
+void ProcesBuffer(char sym_pos);
+char DecodeVariable(char sym_pos, void *variable, const char *format );
+char DecodeInst();
 char QueueUart();
 
 void Uart_Send(  char tekst[] )
@@ -107,9 +111,20 @@ char DecodeVariable(char sym_pos, void *variable, const char *format )
 char DecodeInst()
 {
   if (0 == strncmp(sU.req,"*IDN",REQ_SYM4)) return REQ_IDN;
+  
   if (0 == strncmp(sU.req,"DAC1",REQ_SYM4)) return REQ_DAC1;
   if (0 == strncmp(sU.req,"DAC2",REQ_SYM4)) return REQ_DAC2;
+  if (0 == strncmp(sU.req,"DAC3",REQ_SYM4)) return REQ_DAC3;
+  if (0 == strncmp(sU.req,"DAC4",REQ_SYM4)) return REQ_DAC4;
+  if (0 == strncmp(sU.req,"DAC5",REQ_SYM4)) return REQ_DAC5;
+  if (0 == strncmp(sU.req,"DAC6",REQ_SYM4)) return REQ_DAC6;
+  if (0 == strncmp(sU.req,"DAC7",REQ_SYM4)) return REQ_DAC7;
+  if (0 == strncmp(sU.req,"DAC8",REQ_SYM4)) return REQ_DAC8;
 
+  if (0 == strncmp(sU.req,"ADC1",REQ_SYM4)) return REQ_ADC1;
+  if (0 == strncmp(sU.req,"ADC2",REQ_SYM4)) return REQ_ADC2;
+  if (0 == strncmp(sU.req,"ADC3",REQ_SYM4)) return REQ_ADC3;
+  if (0 == strncmp(sU.req,"ADC4",REQ_SYM4)) return REQ_ADC4;
 }
 
 char QueueUart()
@@ -123,8 +138,35 @@ char QueueUart()
     break;
   
     case REQ_DAC1:
-      sDAC.DAC1 = 3.14159;
       DecodeVariable(REQ_SYM4, &sDAC.DAC1, "%f");
+    break;
+
+    case REQ_DAC2:
+      DecodeVariable(REQ_SYM4, &sDAC.DAC2, "%f");
+    break;
+
+    case REQ_DAC3:
+      DecodeVariable(REQ_SYM4, &sDAC.DAC3, "%f");
+    break;
+
+    case REQ_DAC4:
+      DecodeVariable(REQ_SYM4, &sDAC.DAC4, "%f");
+    break;
+
+    case REQ_ADC1:
+      DecodeVariable(REQ_SYM4, &sADC.ADC1, "%f");
+    break;
+
+    case REQ_ADC2:
+      DecodeVariable(REQ_SYM4, &sADC.ADC2, "%f");
+    break;
+
+    case REQ_ADC3:
+      DecodeVariable(REQ_SYM4, &sADC.ADC3, "%f");
+    break;
+
+    case REQ_ADC4:
+      DecodeVariable(REQ_SYM4, &sADC.ADC4, "%f");
     break;
   
     default:

@@ -20,8 +20,6 @@
 #define REQ_DAC7 7
 #define REQ_DAC8 8
 
-// #define REQ_SYM5 5
-
 #define REQ_ADC1 11
 #define REQ_ADC2 12
 #define REQ_ADC3 13
@@ -53,6 +51,9 @@ extern struct sDecode sD;
 
 void Uart_Send( char tekst[]);
 char DecodeUart(char cUDR);
+void ProcesBuffer(char sym_pos);
+char DecodeVariable(char sym_pos, void *variable, const char *format );
+char DecodeInst();
 char QueueUart();
 
 #endif

@@ -84,6 +84,7 @@ void test_QueueUart_DAC1_send()
 void test_QueueUart_DAC1_check()
 {
     char result = 0;
+    sDAC.DAC1 = 3.14159;
     strcpy(sU.req, "DAC1? ---\xD"); 
 
     result = QueueUart();
@@ -95,6 +96,23 @@ void test_QueueUart_DAC1_check()
     TEST_ASSERT_EQUAL('5', sD.buf[5]);
     TEST_ASSERT_EQUAL('9', sD.buf[6]);
     TEST_ASSERT_EQUAL('0', sD.buf[7]);
+}
+
+void test_QueueUart_ADC1_check()
+{
+    char result = 0;
+    sADC.ADC1 = 3.14159;
+    strcpy(sU.req, "ADC1? \xD"); 
+
+    result = QueueUart();
+    TEST_ASSERT_EQUAL(REQ_ADC1, result);
+    TEST_ASSERT_EQUAL('3', sD.buf[0]);
+    TEST_ASSERT_EQUAL('.', sD.buf[1]);
+    TEST_ASSERT_EQUAL('1', sD.buf[2]);
+    TEST_ASSERT_EQUAL('4', sD.buf[3]);
+    TEST_ASSERT_EQUAL('1', sD.buf[4]);
+    TEST_ASSERT_EQUAL('5', sD.buf[5]);
+    TEST_ASSERT_EQUAL('9', sD.buf[6]);
 }
 
 int main( int argc, char **argv) {
@@ -110,6 +128,8 @@ int main( int argc, char **argv) {
     RUN_TEST(test_QueueUart_DAC1_send);
     tearDown();
     RUN_TEST(test_QueueUart_DAC1_check);
+    tearDown();
+    RUN_TEST(test_QueueUart_ADC1_check);
 
     UNITY_END();
     return 0; // Dodano return dla main
