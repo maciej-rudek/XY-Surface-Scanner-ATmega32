@@ -12,6 +12,8 @@ struct sUART sU;
 struct sDecode sD;
 struct DAC_variables sDAC;
 struct ADC_variables sADC;
+struct Time_variables sTIME;
+struct Scan_variables sSCAN;
 
 
 void Uart_Send( char tekst[]);
