@@ -125,6 +125,17 @@ char DecodeInst()
   if (0 == strncmp(sU.req,"ADC2",REQ_SYM4)) return REQ_ADC2;
   if (0 == strncmp(sU.req,"ADC3",REQ_SYM4)) return REQ_ADC3;
   if (0 == strncmp(sU.req,"ADC4",REQ_SYM4)) return REQ_ADC4;
+
+  if (0 == strncmp(sU.req,"TPOI",REQ_TPOIN)) return REQ_TPOIN;
+  if (0 == strncmp(sU.req,"TSTE",REQ_TSTEP)) return REQ_TSTEP;
+  if (0 == strncmp(sU.req,"TRET",REQ_TRETU)) return REQ_TRETU;
+  if (0 == strncmp(sU.req,"TPOS",REQ_TPOS)) return REQ_TPOS;
+
+  if (0 == strncmp(sU.req,"SCAN",REQ_SCAN)) return REQ_SCAN;
+  if (0 == strncmp(sU.req,"MODE",REQ_MODE)) return REQ_MODE;
+  if (0 == strncmp(sU.req,"OXPO",REQ_oX)) return REQ_oX;
+  if (0 == strncmp(sU.req,"OYPO",REQ_oY)) return REQ_oY;
+  if (0 == strncmp(sU.req,"RESO",REQ_RESO)) return REQ_RESO;
 }
 
 char QueueUart()
@@ -167,6 +178,42 @@ char QueueUart()
 
     case REQ_ADC4:
       DecodeVariable(REQ_SYM4, &sADC.ADC4, "%f");
+    break;
+
+    case REQ_TPOIN:
+      DecodeVariable(REQ_SYM4, &sTIME.point, "%c");
+    break;
+
+    case REQ_TSTEP:
+      DecodeVariable(REQ_SYM4, &sTIME.step, "%c");
+    break;
+
+    case REQ_TRETU:
+      DecodeVariable(REQ_SYM4, &sTIME.retour, "%c");
+    break;
+
+    case REQ_TPOS:
+      DecodeVariable(REQ_SYM4, &sTIME.position, "%c");
+    break;
+
+    case REQ_SCAN:
+      DecodeVariable(REQ_SYM4, &sSCAN.scan, "%c");
+    break;
+
+    case REQ_MODE:
+      DecodeVariable(REQ_SYM4, &sSCAN.mode, "%c");
+    break;
+
+    case REQ_oX:
+      DecodeVariable(REQ_SYM4, &sSCAN.oX, "%c");
+    break;
+
+    case REQ_oY:
+      DecodeVariable(REQ_SYM4, &sSCAN.oY, "%c");
+    break;
+
+    case REQ_RESO:
+      DecodeVariable(REQ_SYM4, &sSCAN.points, "%c");
     break;
   
     default:

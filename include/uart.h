@@ -26,10 +26,16 @@
 #define REQ_ADC4 14
 
 #define REQ_IDN 100
-#define REQ_TIME1 21
-#define REQ_TIME2 22
-#define REQ_TIME3 23
-#define REQ_TIME4 24
+#define REQ_TPOIN 21
+#define REQ_TSTEP 22
+#define REQ_TRETU 23
+#define REQ_TPOS 24
+
+#define REQ_SCAN 31
+#define REQ_MODE 32
+#define REQ_oX 33
+#define REQ_oY 34
+#define REQ_RESO 35
 
 #define REQ_WHAT 244
 
